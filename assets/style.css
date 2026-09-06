@@ -1,0 +1,1916 @@
+@charset "UTF-8";
+
+/* ===========================================================
+   大分明野ボーイズ 共通スタイル
+   色は :root の変数だけ書き換えれば全ページに反映されます
+   =========================================================== */
+
+/* チームユニフォーム由来の配色
+   濃紺: キャップ・アンダーシャツ / ロイヤルブルー: ユニフォーム本体
+   赤: 袖・胸ロゴ / ゴールド: キャップの「A」・ロゴの縁取り */
+:root {
+  --navy: #16224a;
+  --navy-dark: #0c1430;
+  --blue: #1a5fd0;
+  --blue-light: #e9f1fd;
+  --red: #d92b32;
+  --red-dark: #a8161d;
+  --red-light: #fdeaeb;
+  --gold: #f5a623;
+  --gold-light: #ffc457;
+  --white: #ffffff;
+  --gray-50: #f5f7fa;
+  --gray-100: #eef1f6;
+  --gray-200: #dfe4ec;
+  --gray-400: #9aa4b5;
+  --gray-600: #5d6779;
+  --gray-800: #2b3648;
+
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 2px 8px rgba(22, 34, 74, 0.08);
+  --shadow-lg: 0 8px 28px rgba(22, 34, 74, 0.14);
+  --header-h: 64px;
+
+  --font: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Noto Sans JP",
+    "Yu Gothic Medium", "Yu Gothic", Meiryo, system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--gray-800);
+  background: var(--white);
+  -webkit-text-size-adjust: 100%;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: var(--blue);
+}
+
+/* ---------- レイアウト ---------- */
+
+.wrap {
+  width: 100%;
+  max-width: 1080px;
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+
+.wrap--wide {
+  max-width: 1280px;
+}
+
+.section {
+  padding-block: 56px;
+}
+
+.section--gray {
+  background: var(--gray-50);
+}
+
+/* ---------- ヘッダー ---------- */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--navy);
+  color: var(--white);
+  /* ユニフォームの白パイピング + 赤袖を模した下端のライン */
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.35), 0 4px 0 var(--red);
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: var(--header-h);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--white);
+  white-space: nowrap;
+}
+
+.logo__icon {
+  display: block;
+  flex: 0 0 auto;
+  height: 40px;
+  width: auto;
+}
+
+.logo__text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.3;
+}
+
+.logo__mark {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--white);
+}
+
+.logo__sub {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.65);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.header__right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* SNS アイコンリンク（ヘッダー・フッター共通） */
+.social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  opacity: 0.85;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.social:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.social img {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+/* ヘッダではロゴマーク・ナビと同じ高さに揃える */
+.header .social img {
+  width: 40px;
+  height: 40px;
+}
+
+/* スマートフォンではロゴとメニューボタンに挟まれて窮屈になるため小さくする */
+@media (max-width: 600px) {
+  .header .social img {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* ---------- ナビゲーション ---------- */
+
+.nav__list {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav__link {
+  display: block;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.nav__link:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--white);
+}
+
+.nav__link[aria-current="page"] {
+  color: var(--white);
+  background: var(--red);
+}
+
+.nav__toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--white);
+  cursor: pointer;
+}
+
+.nav__toggle span,
+.nav__toggle span::before,
+.nav__toggle span::after {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 2px;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.nav__toggle span {
+  margin-inline: auto;
+  position: relative;
+}
+
+.nav__toggle span::before,
+.nav__toggle span::after {
+  content: "";
+  position: absolute;
+  left: 0;
+}
+
+.nav__toggle span::before {
+  top: -7px;
+}
+
+.nav__toggle span::after {
+  top: 7px;
+}
+
+.nav__toggle[aria-expanded="true"] span {
+  background: transparent;
+}
+
+.nav__toggle[aria-expanded="true"] span::before {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav__toggle[aria-expanded="true"] span::after {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* 項目が 8 つになり、横並びでは 1080px 未満で 2 段に折り返すため、
+   ここから下はハンバーガーメニューに切り替える */
+@media (max-width: 1080px) {
+  .nav__toggle {
+    display: block;
+  }
+
+  .nav {
+    position: fixed;
+    inset: var(--header-h) 0 auto 0;
+    background: var(--navy-dark);
+    max-height: calc(100vh - var(--header-h));
+    overflow-y: auto;
+    transform: translateY(-8px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.18s, transform 0.18s, visibility 0.18s;
+  }
+
+  .nav[data-open="true"] {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .nav__list {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 8px 20px 20px;
+  }
+
+  .nav__link {
+    padding: 14px 12px;
+    font-size: 15px;
+    border-radius: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .nav__link[aria-current="page"] {
+    background: transparent;
+    color: var(--gold-light);
+  }
+}
+
+/* ---------- ヒーロー（トップページ） ---------- */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 45%, var(--blue) 100%);
+  color: var(--white);
+}
+
+.hero::before,
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* 斜めの赤いストライプ */
+.hero::before {
+  background: repeating-linear-gradient(
+    -60deg,
+    rgba(217, 43, 50, 0) 0 60px,
+    rgba(217, 43, 50, 0.55) 60px 66px,
+    rgba(217, 43, 50, 0) 66px 96px
+  );
+  opacity: 0.4;
+}
+
+/* 右下の光 */
+.hero::after {
+  background: radial-gradient(
+    120% 100% at 85% 110%,
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(255, 255, 255, 0) 60%
+  );
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 44px;
+  padding-block: 64px;
+}
+
+.hero__content {
+  flex: 0 1 400px;
+  min-width: 0;
+}
+
+.hero__banner {
+  flex: 1 1 460px;
+  min-width: 0;
+}
+
+.hero__banner img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  /* 左端を透明に落として、隣接する見出し側の背景に溶け込ませる */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0, 0, 0, 0.15) 10%,
+    rgba(0, 0, 0, 0.65) 24%,
+    #000 42%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0, 0, 0, 0.15) 10%,
+    rgba(0, 0, 0, 0.65) 24%,
+    #000 42%
+  );
+}
+
+@media (max-width: 860px) {
+  .hero__inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 28px;
+    /* バナーを下端まで見せるため、下側の余白は持たせない */
+    padding-block: 44px 0;
+  }
+
+  .hero__content {
+    flex: 1 1 auto;
+    order: 1;
+  }
+
+  /* 画面の横幅いっぱいに表示する（.wrap の左右パディングを打ち消す） */
+  .hero__banner {
+    flex: 1 1 auto;
+    order: 2;
+    width: auto;
+    margin-inline: -20px;
+  }
+
+  /* 縦積みになると左右の隣接がなくなるため、溶け込ませる処理は解除する。
+     左端の余白だけを切り落とし、ロゴと選手の両方が入る位置で拡大する */
+  .hero__banner img {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: 40% center;
+    border-radius: 0;
+    box-shadow: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+
+.hero__label {
+  display: inline-block;
+  margin: 0 0 18px;
+  padding: 5px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  background: var(--red);
+  border-radius: 999px;
+}
+
+.hero__title {
+  margin: 0;
+  line-height: 0;
+}
+
+/* ユニフォームの胸ロゴ（AKENO BIG BOYS） */
+.hero__logo {
+  display: block;
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+}
+
+.hero__name {
+  margin: 16px 0 0;
+  font-size: clamp(19px, 3.6vw, 26px);
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  line-height: 1.3;
+}
+
+.hero__lead {
+  margin: 18px 0 0;
+  font-size: clamp(14px, 2.6vw, 17px);
+  color: rgba(255, 255, 255, 0.86);
+  max-width: 34em;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+/* ---------- ボタン ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s, transform 0.1s;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn--primary {
+  background: var(--red);
+  color: var(--white);
+}
+
+.btn--primary:hover {
+  background: var(--red-dark);
+}
+
+.btn--ghost {
+  border-color: rgba(255, 255, 255, 0.7);
+  color: var(--white);
+}
+
+.btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.btn--outline {
+  border-color: var(--navy);
+  color: var(--navy);
+}
+
+.btn--outline:hover {
+  background: var(--navy);
+  color: var(--white);
+}
+
+/* ---------- ページヘッダー（下層） ---------- */
+
+.pagehead {
+  background: linear-gradient(120deg, var(--navy-dark), var(--navy) 60%, var(--blue));
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+
+.pagehead::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    -60deg,
+    rgba(217, 43, 50, 0) 0 60px,
+    rgba(217, 43, 50, 0.5) 60px 64px,
+    rgba(217, 43, 50, 0) 64px 92px
+  );
+  opacity: 0.35;
+}
+
+.pagehead__inner {
+  position: relative;
+  z-index: 1;
+  padding-block: 40px 34px;
+}
+
+.pagehead__title {
+  margin: 0;
+  font-size: clamp(26px, 5.5vw, 38px);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.pagehead__en {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--gold-light);
+  text-transform: uppercase;
+}
+
+.pagehead__lead {
+  margin: 14px 0 0;
+  max-width: 44em;
+  font-size: clamp(13px, 2.4vw, 15px);
+  line-height: 1.9;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ---------- パンくずリスト ---------- */
+
+.crumb {
+  margin: 0 0 12px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.crumb a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.crumb a:hover {
+  color: var(--white);
+  text-decoration: underline;
+}
+
+.crumb__sep {
+  margin: 0 8px;
+}
+
+.crumb__now {
+  color: var(--white);
+  font-weight: 700;
+}
+
+/* ---------- セクション見出し ---------- */
+
+.headline {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin: 0 0 24px;
+  padding-left: 14px;
+  border-left: 5px solid var(--red);
+  font-size: clamp(20px, 4vw, 26px);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--navy);
+}
+
+.headline__en {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--gray-400);
+  text-transform: uppercase;
+}
+
+/* ---------- 新着情報 ---------- */
+
+.news {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--gray-200);
+}
+
+.news__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 18px;
+  padding: 10px 4px;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.news__date {
+  flex: 0 0 auto;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gray-400);
+  font-variant-numeric: tabular-nums;
+}
+
+/* p の既定マージンが行の高さを押し広げるので落とす。
+   基準幅を詰めているのは、狭い画面でも日付と本文を同じ行に収めるため。 */
+.news__text {
+  flex: 1 1 170px;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* リンク先を書いた行だけ本文がリンクになる */
+.news__link {
+  color: var(--blue);
+  text-decoration: none;
+}
+
+.news__link:hover {
+  text-decoration: underline;
+}
+
+/* ---------- 入団案内 ---------- */
+
+/* 準備中（join.txt の「# 公開」が ON 以外のとき） */
+.prep {
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 48px 24px;
+  text-align: center;
+}
+
+.prep__title {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.prep__text {
+  margin: 0;
+  font-size: 14px;
+  color: var(--gray-600);
+}
+
+.joinsec {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.joinsec__title {
+  margin: 0;
+  padding: 14px 18px;
+  background: var(--navy);
+  color: var(--white);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.joinsec__body {
+  padding: 18px;
+}
+
+.joinsec__p {
+  margin: 0 0 10px;
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.joinsec__p:last-child {
+  margin-bottom: 0;
+}
+
+.joinsec__note {
+  margin: 14px 0 0;
+  padding: 10px 14px;
+  background: var(--red-light);
+  border-left: 3px solid var(--red);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--red-dark);
+}
+
+/* 練習体験会の日程 */
+.trial {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trial__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  padding: 12px 4px;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.trial__row:first-child {
+  border-top: 1px solid var(--gray-200);
+}
+
+.trial__date {
+  flex: 0 0 auto;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--navy);
+  font-variant-numeric: tabular-nums;
+}
+
+.trial__time {
+  flex: 0 0 auto;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gray-800);
+}
+
+.trial__place {
+  flex: 1 1 160px;
+  font-size: 14px;
+  color: var(--gray-600);
+}
+
+.trial__note {
+  flex: 0 0 auto;
+  padding: 2px 8px;
+  background: var(--gray-100);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray-600);
+}
+
+/* 問い合わせ先 */
+.contact {
+  margin: 0;
+}
+
+.contact__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  padding: 12px 4px;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.contact__row:first-child {
+  border-top: 1px solid var(--gray-200);
+}
+
+.contact__label {
+  flex: 0 0 96px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gray-600);
+}
+
+.contact__value {
+  flex: 1 1 180px;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--gray-800);
+}
+
+.contact__link {
+  color: var(--blue);
+  text-decoration: none;
+}
+
+.contact__link:hover {
+  text-decoration: underline;
+}
+
+/* 申込書 PDF */
+.joindoc {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  background: var(--navy);
+  border-radius: var(--radius-sm);
+  color: var(--white);
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background-color 0.15s;
+}
+
+.joindoc + .joindoc {
+  margin-top: 10px;
+}
+
+.joindoc:hover {
+  background: var(--navy-dark);
+}
+
+.joindoc__ext {
+  padding: 2px 8px;
+  background: var(--red);
+  border-radius: 4px;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+}
+
+@media (max-width: 600px) {
+  .contact__label {
+    flex: 0 0 100%;
+  }
+
+  .joindoc {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+/* ---------- 試合速報 ---------- */
+
+.match {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.match__title {
+  margin: 0;
+  padding: 14px 18px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--white);
+  background: var(--navy);
+}
+
+.match__body {
+  padding: 6px 18px 14px;
+}
+
+.match__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  padding: 12px 0;
+  border-bottom: 1px dashed var(--gray-200);
+}
+
+.match__row:last-child {
+  border-bottom: 0;
+}
+
+.match__meta {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  min-width: 108px;
+}
+
+.match__date {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blue);
+  font-variant-numeric: tabular-nums;
+}
+
+.match__place {
+  font-size: 12px;
+  color: var(--gray-400);
+}
+
+.match__round {
+  flex: 0 0 auto;
+  min-width: 62px;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--navy);
+  background: var(--gray-100);
+  border-radius: 4px;
+  text-align: center;
+}
+
+.match__vs {
+  flex: 1 1 140px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.match__vs::before {
+  content: "対 ";
+  color: var(--gray-400);
+  font-weight: 400;
+  font-size: 13px;
+}
+
+.match__score {
+  flex: 0 0 auto;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.match__note {
+  flex: 1 1 100%;
+  font-size: 12px;
+  color: var(--gray-600);
+}
+
+.match__comment {
+  margin: 10px 0 0;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--red-dark);
+  background: var(--red-light);
+  border-radius: var(--radius-sm);
+}
+
+/* 勝敗バッジ */
+.badge {
+  flex: 0 0 auto;
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  font-size: 14px;
+  font-weight: 800;
+  border-radius: 50%;
+  line-height: 1;
+}
+
+.badge--win {
+  background: var(--red);
+  color: var(--white);
+}
+
+.badge--lose {
+  background: var(--gray-200);
+  color: var(--gray-600);
+}
+
+.badge--tbd {
+  border: 2px dashed var(--gray-400);
+  color: var(--gray-400);
+  font-size: 10px;
+  letter-spacing: -0.02em;
+}
+
+/* ---------- 主な戦績 ---------- */
+
+.record {
+  margin-bottom: 30px;
+}
+
+.record__year {
+  display: inline-block;
+  margin: 0 0 12px;
+  padding: 4px 16px;
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--white);
+  background: var(--navy);
+  border-radius: 999px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 見出しの年に添える「18期生」 */
+.record__term {
+  margin-left: 10px;
+  padding-left: 10px;
+  border-left: 1px solid rgba(255, 255, 255, 0.35);
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.record__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.record__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  padding: 12px 16px;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-left: 4px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+}
+
+.record__item--gold {
+  border-left-color: var(--red);
+}
+
+.record__item--silver {
+  border-left-color: var(--blue);
+}
+
+/* 大会の区分（県大会・九州大会・全国大会） */
+.record__cat {
+  flex: 0 0 auto;
+  min-width: 76px;
+  padding: 3px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--gray-600);
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+}
+
+.record__cat--kyushu {
+  color: var(--blue);
+  border-color: var(--blue);
+}
+
+.record__cat--japan {
+  color: var(--white);
+  background: var(--navy);
+  border-color: var(--navy);
+}
+
+.record__name {
+  flex: 1 1 240px;
+  font-weight: 500;
+}
+
+.record__result {
+  flex: 0 0 auto;
+  padding: 3px 12px;
+  font-size: 13px;
+  font-weight: 800;
+  border-radius: 999px;
+  background: var(--gray-100);
+  color: var(--gray-600);
+}
+
+.record__item--gold .record__result {
+  background: var(--red);
+  color: var(--white);
+}
+
+.record__item--silver .record__result {
+  background: var(--blue-light);
+  color: var(--blue);
+}
+
+/* 卒団生・選手紹介での戦績。件数を減らさずに行だけを詰める */
+.record__list--compact {
+  gap: 3px;
+}
+
+.record__list--compact .record__item {
+  gap: 4px 10px;
+  padding: 5px 10px;
+  border-left-width: 3px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.record__list--compact .record__cat {
+  min-width: 58px;
+  padding: 1px 6px;
+  font-size: 11px;
+}
+
+.record__list--compact .record__name {
+  flex: 1 1 200px;
+  line-height: 1.5;
+}
+
+.record__list--compact .record__result {
+  padding: 1px 9px;
+  font-size: 12px;
+}
+
+/* 狭い画面では大会名が 2 行に折り返すので、その分さらに詰める */
+@media (max-width: 600px) {
+  .record__list--compact .record__item {
+    gap: 3px 8px;
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+
+  .record__list--compact .record__cat {
+    min-width: 52px;
+    font-size: 10px;
+  }
+
+  .record__list--compact .record__result {
+    font-size: 11px;
+  }
+}
+
+/* ---------- スケジュール ---------- */
+
+.schedule {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.schedule__card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  text-decoration: none;
+  color: inherit;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+}
+
+.schedule__card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--blue);
+}
+
+.schedule__icon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--white);
+  background: var(--red);
+  border-radius: var(--radius-sm);
+}
+
+.schedule__month {
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--navy);
+  line-height: 1.3;
+  font-variant-numeric: tabular-nums;
+}
+
+.schedule__year {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray-400);
+}
+
+/* ---------- 名簿テーブル ---------- */
+
+.roster {
+  overflow-x: auto;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  background: var(--white);
+}
+
+.roster table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  min-width: 420px;
+}
+
+.roster th,
+.roster td {
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--gray-100);
+  white-space: nowrap;
+}
+
+.roster th {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--white);
+  background: var(--navy);
+}
+
+.roster tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.roster tbody tr:nth-child(even) {
+  background: var(--gray-50);
+}
+
+.roster td:first-child {
+  font-weight: 700;
+  color: var(--navy);
+}
+
+/* ---------- 期のアコーディオン ---------- */
+
+.term {
+  margin-bottom: 12px;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.term__head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 20px 18px;
+  font: inherit;
+  text-align: left;
+  color: var(--navy);
+  background: var(--white);
+  border: 0;
+  cursor: pointer;
+}
+
+.term__head:hover {
+  background: var(--gray-50);
+}
+
+.term__no {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  min-width: 60px;
+  padding: 5px 12px;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--white);
+  background: var(--navy);
+  border-radius: 999px;
+}
+
+.term__label {
+  flex: 1 1 auto;
+  /* 狭い画面では「21期生 2026年卒団」が折り返すので、そこだけ小さくする */
+  font-size: clamp(16px, 3.6vw, 18px);
+  font-weight: 700;
+}
+
+.term__year {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gray-400);
+  margin-left: 8px;
+}
+
+.term__count {
+  flex: 0 0 auto;
+  font-size: 13px;
+  color: var(--gray-400);
+}
+
+.term__arrow {
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  border-right: 2px solid var(--gray-600);
+  border-bottom: 2px solid var(--gray-600);
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform 0.2s;
+}
+
+.term__head[aria-expanded="true"] .term__arrow {
+  transform: rotate(-135deg) translate(-2px, -2px);
+}
+
+/* 詳細ページへのリンクになっている見出し */
+.term__head--link {
+  text-decoration: none;
+}
+
+.term__head--link .term__arrow {
+  transform: rotate(-45deg);
+}
+
+/* 戦績が長いとリンクの行が埋もれるので、区切り線で見出しとして切り離す */
+.term__body {
+  padding: 14px 18px 18px;
+  border-top: 1px solid var(--gray-100);
+}
+
+.term__body[hidden] {
+  display: none;
+}
+
+/* 期のカードの中に戦績を並べるときは、外側の白と重ならないよう背景を落とす */
+.term__body .record__item {
+  background: var(--gray-50);
+}
+
+/* ---------- 選手カード（期の詳細ページ） ---------- */
+
+.pcards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pcard {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.pcard__photo {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  background: var(--gray-100);
+}
+
+.pcard__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pcard__noimage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--gray-400);
+}
+
+.pcard__body {
+  padding: 11px 13px 13px;
+}
+
+.pcard__name {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 7px;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.pcard__no {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  min-width: 25px;
+  height: 25px;
+  padding: 0 6px;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--white);
+  background: var(--red);
+  border-radius: 999px;
+}
+
+.pcard__meta {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 3px 10px;
+  margin: 0;
+  font-size: 12px;
+}
+
+.pcard__meta dt {
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--gray-400);
+}
+
+.pcard__meta dd {
+  margin: 0;
+  color: var(--gray-800);
+}
+
+.backlink {
+  margin: 30px 0 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.backlink a {
+  color: var(--navy);
+  text-decoration: none;
+}
+
+.backlink a::before {
+  content: "← ";
+}
+
+.backlink a:hover {
+  text-decoration: underline;
+}
+
+@media (min-width: 561px) {
+  .pcards {
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 18px;
+  }
+
+  .pcard__name {
+    font-size: 16px;
+  }
+
+  .pcard__meta {
+    font-size: 13px;
+  }
+}
+
+/* ---------- 名簿（球団・保護者会） ---------- */
+
+.staff {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin-bottom: 26px;
+}
+
+.staff__title {
+  margin: 0;
+  padding: 13px 18px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--white);
+  background: var(--navy);
+}
+
+.staff__list {
+  margin: 0;
+  padding: 0;
+}
+
+.staff__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 20px;
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.staff__row:last-child {
+  border-bottom: 0;
+}
+
+.staff__role {
+  flex: 0 0 auto;
+  width: 210px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gray-600);
+}
+
+.staff__name {
+  flex: 1 1 auto;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+@media (max-width: 560px) {
+  .staff__role {
+    width: 100%;
+  }
+}
+
+/* ---------- 補助 ---------- */
+
+.note {
+  padding: 20px;
+  font-size: 14px;
+  color: var(--gray-600);
+  background: var(--gray-50);
+  border: 1px dashed var(--gray-200);
+  border-radius: var(--radius);
+  text-align: center;
+}
+
+.loading {
+  padding: 30px;
+  text-align: center;
+  color: var(--gray-400);
+  font-size: 14px;
+}
+
+.empty {
+  padding: 16px 0;
+  color: var(--gray-400);
+  font-size: 14px;
+}
+
+.stack > * + * {
+  margin-top: 10px;
+}
+
+/* ---------- フッター ---------- */
+
+.footer {
+  margin-top: 40px;
+  padding-block: 26px 20px;
+  background: var(--navy-dark);
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 13px;
+}
+
+/* チーム名は 2 行、ナビは 1 行と高さが違うので、上端ではなく中央で揃える */
+.footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 28px;
+}
+
+.footer__brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.footer__name {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--white);
+  margin: 0 0 4px;
+}
+
+.footer__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer__nav a {
+  color: rgba(255, 255, 255, 0.78);
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.footer__nav a:hover {
+  color: var(--white);
+  text-decoration: underline;
+}
+
+.footer__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  width: 100%;
+  margin: 0;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.footer__copy {
+  margin: 0;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ロゴは濃色背景向けの版が無く文字が沈むため、白い下地を敷いて判読性を確保する */
+.footer__badge {
+  display: block;
+  flex: 0 0 auto;
+  height: 26px;
+  width: auto;
+  padding: 7px 12px;
+  border-radius: 8px;
+  background: var(--white);
+  box-sizing: content-box;
+}
+
+.footer__badgelink {
+  display: block;
+  flex: 0 0 auto;
+  border-radius: 8px;
+  transition: opacity 0.15s;
+}
+
+.footer__badgelink:hover {
+  opacity: 0.82;
+}
+
+/* ---------- お知らせ ---------- */
+
+.info {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin-bottom: 22px;
+}
+
+.info:last-child {
+  margin-bottom: 0;
+}
+
+.info__title {
+  margin: 0;
+  padding: 14px 18px;
+  background: var(--navy);
+  color: var(--white);
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.info__body {
+  padding: 20px 18px;
+}
+
+.info__p {
+  margin: 0 0 12px;
+  font-size: 15px;
+  line-height: 1.95;
+}
+
+.info__p:last-child {
+  margin-bottom: 0;
+}
+
+.info__figure {
+  margin: 18px 0 0;
+  text-align: center;
+}
+
+.info__figure:first-child {
+  margin-top: 0;
+}
+
+.info__img {
+  display: block;
+  width: 100%;
+  max-width: 720px;
+  height: auto;
+  margin-inline: auto;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+}
+
+.info__cap {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--gray-600);
+}
+
+.info__note {
+  margin: 16px 0 0;
+  padding: 10px 14px;
+  background: var(--red-light);
+  border-left: 3px solid var(--red);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--red-dark);
+}
+
+@media (max-width: 600px) {
+  .info__title {
+    font-size: 16px;
+  }
+
+  .info__body {
+    padding: 16px 14px;
+  }
+}
+
+/* ---------- 球団方針 ---------- */
+
+.policy {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px 24px;
+}
+
+.slogan {
+  margin: 0 0 26px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--gray-200);
+  text-align: center;
+}
+
+.slogan__img {
+  display: block;
+  width: 100%;
+  max-width: 620px;
+  height: auto;
+  margin-inline: auto;
+}
+
+.slogan__cap {
+  margin-top: 14px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  color: var(--gray-600);
+}
+
+.policy__title {
+  margin: 26px 0 10px;
+  padding-left: 12px;
+  border-left: 4px solid var(--red);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.policy__p {
+  margin: 0 0 12px;
+  font-size: 15px;
+  line-height: 1.95;
+}
+
+/* 「ラベル | 説明」の行のラベル */
+.policy__label {
+  display: block;
+  margin-bottom: 1px;
+  color: var(--navy);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.policy__p:last-child {
+  margin-bottom: 0;
+}
+
+.policy__note {
+  margin: 20px 0 0;
+  padding: 10px 14px;
+  background: var(--blue-light);
+  border-left: 3px solid var(--blue);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+@media (max-width: 600px) {
+  .policy {
+    padding: 20px 16px;
+  }
+}
+
+/* ---------- カレンダー（Googleカレンダー埋め込み） ---------- */
+
+.gcal {
+  /* 見えるカレンダーの高さ */
+  --gcal-h: 600px;
+  /* 埋め込みの下端にある Google のロゴと「＋ Google カレンダー」を隠す分。
+     隠れ方がずれたときは、この数値だけを増減する */
+  --gcal-cut: 32px;
+
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-top: 3px solid var(--blue);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  /* --gcal-h を枠線ではなく中身の高さにしたいので border-box を外す */
+  box-sizing: content-box;
+  height: var(--gcal-h);
+  overflow: hidden;
+}
+
+/* 埋め込み側は固定幅で来るので、枠側で横幅を持たせる。
+   高さは枠より下端の分だけ大きくし、はみ出した部分を枠で切り落としている */
+.gcal__frame {
+  display: block;
+  width: 100%;
+  height: calc(var(--gcal-h) + var(--gcal-cut));
+  border: 0;
+}
+
+@media (max-width: 600px) {
+  .gcal {
+    --gcal-h: 520px;
+  }
+}
+
+/* ---------- チーム紹介（トップページ） ---------- */
+
+.about {
+  max-width: 46em;
+  color: var(--gray-800);
+  line-height: 1.95;
+}
+
+.about p {
+  margin: 0 0 14px;
+}
+
+.about ul {
+  margin: 0;
+  padding-left: 1.3em;
+}
+
+.about li {
+  margin-bottom: 4px;
+}
+
+.about a {
+  color: var(--blue);
+  font-weight: 700;
+}
+
+/* 狭い画面では 1 行に入る字数が少なく圧迫感が出るので、本文を少し小さくする */
+@media (max-width: 600px) {
+  .about {
+    font-size: 15px;
+    line-height: 1.85;
+  }
+}
+
+/* ---------- モーション設定を尊重 ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  * {
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="大分明野ボーイズ">
+<rect width="64" height="64" rx="13" fill="#16224a"/>
+<g transform="translate(11.8 10) scale(.44)" fill-rule="evenodd" paint-order="stroke"
+   stroke="#f5a623" stroke-width="9" stroke-linejoin="miter" stroke-miterlimit="2">
+<path d="M26 0H60L92 100H62L56 80H36L30 100H0Z M43 18L56 58H31Z" fill="#d42a30"/>
+</g>
+</svg>

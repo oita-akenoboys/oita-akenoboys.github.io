@@ -1,0 +1,17 @@
+# 大分明野ボーイズ  https://oita-akenoboys.github.io/
+# 検索エンジンのクローラ向けの設定です。
+#
+# このファイルはドメインの直下（サイトの一番上）に置きます。
+# 検索エンジンはドメイン直下の robots.txt しか読みません。
+
+User-agent: *
+Allow: /
+
+# 更新のしかたを書いた説明書きなので、検索結果には出しません
+Disallow: /data/README.txt
+Disallow: /info/README.txt
+
+# data/ の他の txt はページの中身そのものです。
+# ここを Disallow にすると検索エンジンがページの内容を読めなくなります。
+
+Sitemap: https://oita-akenoboys.github.io/sitemap.xml
