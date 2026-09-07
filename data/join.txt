@@ -66,5 +66,5 @@
 # 11. 入団申込書 | PDF
 入団申込書（両面印刷してください） | pdf/application.pdf
 
-# 12. 体験入団の案内について | PDF
-体験入団の案内について | pdf/joinusguide.pdf
+# 12. 体験入団のご案内（配布用） | PDF
+体験入団の案内について（必要に応じてご利用ください） | pdf/joinusguide.pdf
