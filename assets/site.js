@@ -651,6 +651,20 @@
     return box;
   }
 
+  /* canonical と og:url を ?term=N 付きの URL に書き換える。
+     データの読み込みを待たずに呼べるようにしておき、
+     読み込みが遅い・失敗したときでも正しい URL を検索エンジンに示せるようにする。 */
+  function updateCanonical(term) {
+    var canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) return { url: "", origin: "" };
+    var url = canonical.href.split("?")[0] + "?term=" + encodeURIComponent(term);
+    canonical.href = url;
+    var origin = url.split("/").slice(0, 3).join("/") + "/";
+    var ogUrl = document.querySelector('meta[property="og:url"]');
+    if (ogUrl) ogUrl.setAttribute("content", url);
+    return { url: url, origin: origin };
+  }
+
   /* 検索エンジンには期ごとに別ページとして扱ってほしいので、
      canonical・説明文・パンくずを表示中の期に合わせて書き換える */
   function applySection(section, heading, term) {
@@ -679,22 +693,16 @@
     var now = document.querySelector(".crumb__now");
     if (now) now.textContent = heading;
 
-    var canonical = document.querySelector('link[rel="canonical"]');
-    var url = "";
-    var origin = "";
-    if (canonical) {
-      url = canonical.href.split("?")[0] + "?term=" + encodeURIComponent(term);
-      canonical.href = url;
-      origin = url.split("/").slice(0, 3).join("/") + "/";
-    }
+    var canon = updateCanonical(term);
+    var url = canon.url;
+    var origin = canon.origin;
 
     var text = "大分明野ボーイズ " + heading + section.about;
 
     [
       ['meta[name="description"]', text],
       ['meta[property="og:description"]', text],
-      ['meta[property="og:title"]', document.title],
-      ['meta[property="og:url"]', url]
+      ['meta[property="og:title"]', document.title]
     ].forEach(function (pair) {
       var node = document.querySelector(pair[0]);
       if (node && pair[1]) node.setAttribute("content", pair[1]);
@@ -727,6 +735,9 @@
       showTermMissing(target);
       return;
     }
+
+    // 名簿データの読み込みを待たず、URL からわかる canonical / og:url を先に確定させる
+    updateCanonical(term);
 
     var jobs = SECTIONS.map(function (s) {
       return loadText(s.file)
