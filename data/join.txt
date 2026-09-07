@@ -66,6 +66,6 @@
 # 11. 入団申込書 | PDF
 入団申込書（両面印刷してください） | pdf/application.pdf
 
-# 12. 体験入団のご案内（配布用） | PDF
-体験入団の案内について（必要に応じてご利用ください） | pdf/joinusguide.pdf
-大分明野ボーイズについて（必要に応じてご利用ください） | pdf/aboutakeno.pdf
+# 12. 体験入団のご案内（必要に応じて印刷してください） | PDF
+大分明野ボーイズのご紹介 | pdf/aboutakeno.pdf
+体験入団の案内について | pdf/joinusguide.pdf
