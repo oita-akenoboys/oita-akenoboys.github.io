@@ -505,12 +505,93 @@
     return p;
   }
 
-  function buildPlayerCard(p) {
+  /* ---------- 顔写真の切り取り方を自動で決める ----------
+     顔写真には横長（560 × 373 など）と縦長（245 × 350 など）が混ざっています。
+     枠を横長に固定してしまうと、縦長の写真は上下が大きく切り落とされ、
+     頭が欠けた状態で表示されます。そこで 2 段構えで自動調整します。
+
+       1. その期の写真を数枚だけ先に読み、縦横比の中央値をカードの枠にする
+          → 同じ期の写真はたいてい同じ形なので、ほとんど切らずに収まります
+       2. それでも枠と形が違う写真は、顔が残るように上寄せで切る
+
+     写真を差し替えるだけで自動的に追従します。HTML や CSS を書き替える
+     必要はありません。混ざっていても、多いほうの形に枠が合います。
+  --------------------------------------------------------- */
+
+  var FRAME_MIN = 0.66;    // 枠として許す一番の縦長（2 : 3）
+  var FRAME_MAX = 1.60;    // 枠として許す一番の横長（8 : 5）
+  var FRAME_PROBE = 5;     // 枠を決めるために先に読む枚数
+  var FRAME_WAIT = 1500;   // 写真の読み込みを待つ上限（ミリ秒）
+  var FACE_AT = 0.28;      // 顔は写真の上から約 28% の高さにある、とみなす
+  var FACE_TO = 0.5;       // その顔を、枠の上から 50% の高さに置く
+
+  // 写真を 1 枚読んで「横 ÷ 縦」を返す。読めなければ 0
+  function photoRatio(src) {
+    return new Promise(function (resolve) {
+      var probe = new Image();
+      probe.onload = function () {
+        resolve(probe.naturalHeight ? probe.naturalWidth / probe.naturalHeight : 0);
+      };
+      probe.onerror = function () {
+        resolve(0);
+      };
+      probe.src = src;
+    });
+  }
+
+  function median(nums) {
+    var sorted = nums.slice().sort(function (a, b) {
+      return a - b;
+    });
+    var mid = Math.floor(sorted.length / 2);
+    return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+  }
+
+  // 先頭の数枚から枠の縦横比を決める。写真が無いときや読めないときは 0
+  function frameRatio(srcs) {
+    if (!srcs.length) return Promise.resolve(0);
+
+    var probes = srcs.slice(0, FRAME_PROBE).map(photoRatio);
+    // 写真が返ってこなくても名簿は出したいので、待つのは FRAME_WAIT まで
+    var giveUp = new Promise(function (resolve) {
+      setTimeout(function () {
+        resolve(null);
+      }, FRAME_WAIT);
+    });
+
+    return Promise.race([Promise.all(probes), giveUp]).then(function (ratios) {
+      var known = (ratios || []).filter(function (r) {
+        return r > 0;
+      });
+      if (!known.length) return 0;
+      return Math.min(FRAME_MAX, Math.max(FRAME_MIN, median(known)));
+    });
+  }
+
+  /* 枠より縦長の写真は上下が切られる。顔が枠の中央あたりに来る
+     object-position の縦位置（0 = 上端 / 1 = 下端）を返す */
+  function cropTop(ratio, frame) {
+    if (!ratio || !frame || ratio >= frame) return 0.5;  // 左右が切られる場合は中央でよい
+    var visible = ratio / frame;                         // 縦に見えている割合
+    if (visible > 0.97) return 0.5;                      // ほんの数 % なら中央のままでよい
+    var pos = (FACE_AT - FACE_TO * visible) / (1 - visible);
+    return Math.min(1, Math.max(0, pos));
+  }
+
+  function buildPlayerCard(p, frame) {
     var item = el("li", "pcard");
 
     var figure = el("div", "pcard__photo");
     if (p.photo) {
       var img = document.createElement("img");
+      // 切り取る位置は、写真の大きさが分かってから決める（src より先に用意する）
+      img.addEventListener("load", function () {
+        var ratio = img.naturalHeight ? img.naturalWidth / img.naturalHeight : 0;
+        figure.style.setProperty(
+          "--pcard-pos",
+          "50% " + Math.round(cropTop(ratio, frame) * 100) + "%"
+        );
+      });
       img.src = p.photo;
       img.alt = p.name;
       img.loading = "lazy";
@@ -686,11 +767,21 @@
       if (!roster.length) {
         target.appendChild(el("p", "empty", "名簿は準備中です。"));
       } else {
+        var players = roster.map(playerFields);
         var cards = el("ul", "pcards");
-        roster.forEach(function (f) {
-          cards.appendChild(buildPlayerCard(playerFields(f)));
-        });
         target.appendChild(cards);
+
+        // 枠の形が決まってから並べる。あとから高さが変わってガタつかない
+        var srcs = [];
+        players.forEach(function (p) {
+          if (p.photo) srcs.push(p.photo);
+        });
+        frameRatio(srcs).then(function (frame) {
+          if (frame) cards.style.setProperty("--pcard-ratio", frame.toFixed(3));
+          players.forEach(function (p) {
+            cards.appendChild(buildPlayerCard(p, frame || 1.5));
+          });
+        });
       }
 
       target.appendChild(buildBackLink(section));

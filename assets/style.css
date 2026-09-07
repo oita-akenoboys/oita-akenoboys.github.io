@@ -1375,6 +1375,10 @@ a {
   margin: 0;
   padding: 0;
   list-style: none;
+
+  /* 写真の枠の縦横比。site.js がその期の写真を実際に見て置き替えます。
+     ここに書いてあるのは、写真が 1 枚も読めなかったときの控えです */
+  --pcard-ratio: 3 / 2;
 }
 
 .pcard {
@@ -1387,7 +1391,7 @@ a {
 
 .pcard__photo {
   position: relative;
-  aspect-ratio: 3 / 2;
+  aspect-ratio: var(--pcard-ratio, 3 / 2);
   background: var(--gray-100);
 }
 
@@ -1396,6 +1400,9 @@ a {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* 枠に収まらない写真は、顔が切れないよう上寄せで切る。
+     縦位置は site.js が 1 枚ずつ計算して入れます */
+  object-position: var(--pcard-pos, 50% 50%);
 }
 
 .pcard__noimage {
