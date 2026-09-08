@@ -729,11 +729,17 @@ a {
 .joinsec__note {
   margin: 14px 0 0;
   padding: 10px 14px;
-  background: var(--red-light);
-  border-left: 3px solid var(--red);
+  background: var(--blue-light);
+  border-left: 3px solid var(--blue);
   border-radius: var(--radius-sm);
   font-size: 14px;
   font-weight: 600;
+  color: var(--navy);
+}
+
+.joinsec__note--strong {
+  background: var(--red-light);
+  border-left-color: var(--red);
   color: var(--red-dark);
 }
 
@@ -973,9 +979,14 @@ a {
   padding: 10px 14px;
   font-size: 14px;
   font-weight: 700;
+  color: var(--navy);
+  background: var(--blue-light);
+  border-radius: var(--radius-sm);
+}
+
+.match__comment--strong {
   color: var(--red-dark);
   background: var(--red-light);
-  border-radius: var(--radius-sm);
 }
 
 /* 勝敗バッジ */
@@ -1772,11 +1783,17 @@ a {
 .info__note {
   margin: 16px 0 0;
   padding: 10px 14px;
-  background: var(--red-light);
-  border-left: 3px solid var(--red);
+  background: var(--blue-light);
+  border-left: 3px solid var(--blue);
   border-radius: var(--radius-sm);
   font-size: 14px;
   font-weight: 600;
+  color: var(--navy);
+}
+
+.info__note--strong {
+  background: var(--red-light);
+  border-left-color: var(--red);
   color: var(--red-dark);
 }
 
@@ -1860,6 +1877,12 @@ a {
   font-size: 14px;
   font-weight: 600;
   color: var(--navy);
+}
+
+.policy__note--strong {
+  background: var(--red-light);
+  border-left-color: var(--red);
+  color: var(--red-dark);
 }
 
 @media (max-width: 600px) {
@@ -1975,6 +1998,12 @@ a {
   font-size: 14px;
   font-weight: 600;
   color: var(--navy);
+}
+
+.parking__note--strong {
+  background: var(--red-light);
+  border-left-color: var(--red);
+  color: var(--red-dark);
 }
 
 @media (max-width: 600px) {

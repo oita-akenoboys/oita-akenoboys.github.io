@@ -41,7 +41,8 @@
 
   /* ---------- パーサ ----------
      # 見出し | 補足 | リンク先   … ブロックの始まり
-     > コメント                  … 注記
+     > コメント                  … 注記（青）
+     >> コメント                 … 注記（赤／強調）
      A | B | C                  … データ行（項目は「 | 」区切り）
      //で始まる行と空行は無視
   --------------------------------------------------------- */
@@ -77,7 +78,12 @@
       }
 
       if (line.charAt(0) === ">") {
-        ensure().notes.push(line.slice(1).trim());
+        // > は青、>> は赤。書き手が記号の数だけで色を選べるようにしている
+        var mark = line.match(/^>+/)[0];
+        ensure().notes.push({
+          text: line.slice(mark.length).trim(),
+          strong: mark.length > 1
+        });
         return;
       }
 
@@ -98,6 +104,11 @@
     if (className) node.className = className;
     if (text != null && text !== "") node.textContent = text;
     return node;
+  }
+
+  // 注記の色は基本クラス（青）に --strong（赤）を足し引きして切り替える
+  function noteEl(className, note) {
+    return el("p", note.strong ? className + " " + className + "--strong" : className, note.text);
   }
 
   function showError(target, message) {
@@ -263,7 +274,7 @@
         body.appendChild(buildMatchRow(f));
       });
       b.notes.forEach(function (n) {
-        body.appendChild(el("p", "match__comment", n));
+        body.appendChild(noteEl("match__comment", n));
       });
 
       card.appendChild(body);
@@ -978,7 +989,7 @@
       }
 
       b.notes.forEach(function (n) {
-        box.appendChild(el("p", "joinsec__note", n));
+        box.appendChild(noteEl("joinsec__note", n));
       });
 
       sec.appendChild(box);
@@ -1029,7 +1040,7 @@
       });
 
       b.notes.forEach(function (n) {
-        card.appendChild(el("p", "policy__note", n));
+        card.appendChild(noteEl("policy__note", n));
         count++;
       });
     });
@@ -1097,7 +1108,7 @@
       if (list.childNodes.length) body.appendChild(list);
 
       b.notes.forEach(function (n) {
-        body.appendChild(el("p", "parking__note", n));
+        body.appendChild(noteEl("parking__note", n));
         count++;
       });
     });
@@ -1163,7 +1174,7 @@
       });
 
       b.notes.forEach(function (n) {
-        body.appendChild(el("p", "info__note", n));
+        body.appendChild(noteEl("info__note", n));
       });
 
       item.appendChild(body);
