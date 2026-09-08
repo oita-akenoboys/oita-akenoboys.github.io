@@ -1703,6 +1703,33 @@ a {
   line-height: 1.6;
 }
 
+/* リンク先を書いた件は、見出しの帯ごと押せるようにする。
+   帯いっぱいを当たり判定にしたいので、h2 の余白を打ち消してリンク側に付け替える */
+.info__titlelink {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: -14px -18px;
+  padding: 14px 18px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.info__titlelink:hover {
+  background: var(--navy-dark);
+  text-decoration: underline;
+}
+
+.info__arrow {
+  flex: 0 0 auto;
+  margin-left: auto;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid var(--white);
+  border-bottom: 2px solid var(--white);
+  transform: rotate(-45deg);
+}
+
 .info__body {
   padding: 20px 18px;
 }
@@ -1838,6 +1865,126 @@ a {
 @media (max-width: 600px) {
   .policy {
     padding: 20px 16px;
+  }
+}
+
+/* ---------- 駐車場のご案内 ---------- */
+
+.parking {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 24px 28px;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px 24px;
+}
+
+/* 地図は縦長なので、横に並ぶときは幅を抑えて全体が入るようにする */
+.parking__map {
+  flex: 1 1 260px;
+  max-width: 340px;
+  margin: 0;
+  text-align: center;
+}
+
+.parking__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+}
+
+.parking__cap {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--gray-600);
+}
+
+.parking__body {
+  flex: 2 1 320px;
+}
+
+.parking__title {
+  margin: 24px 0 10px;
+  padding-left: 12px;
+  border-left: 4px solid var(--red);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.parking__title:first-child {
+  margin-top: 0;
+}
+
+.parking__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.parking__item {
+  position: relative;
+  padding: 5px 0 5px 14px;
+  font-size: 15px;
+  line-height: 1.85;
+}
+
+.parking__item::before {
+  content: "";
+  position: absolute;
+  top: 16px;
+  left: 2px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--gray-400);
+}
+
+.parking__link {
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.parking__link:hover {
+  text-decoration: underline;
+}
+
+.parking__ext {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 7px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gray-600);
+  background: var(--gray-100);
+  border-radius: 999px;
+  vertical-align: 2px;
+}
+
+.parking__note {
+  margin: 16px 0 0;
+  padding: 10px 14px;
+  background: var(--blue-light);
+  border-left: 3px solid var(--blue);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+@media (max-width: 600px) {
+  .parking {
+    padding: 20px 16px;
+  }
+
+  .parking__map {
+    max-width: none;
+    margin-inline: auto;
   }
 }
 

@@ -40,9 +40,9 @@
   }
 
   /* ---------- パーサ ----------
-     # 見出し | 補足   … ブロックの始まり
-     > コメント        … 注記
-     A | B | C        … データ行（項目は「 | 」区切り）
+     # 見出し | 補足 | リンク先   … ブロックの始まり
+     > コメント                  … 注記
+     A | B | C                  … データ行（項目は「 | 」区切り）
      //で始まる行と空行は無視
   --------------------------------------------------------- */
 
@@ -53,7 +53,7 @@
 
     function ensure() {
       if (!current) {
-        current = { title: "", sub: "", notes: [], rows: [] };
+        current = { title: "", sub: "", link: "", notes: [], rows: [] };
         blocks.push(current);
       }
       return current;
@@ -68,6 +68,7 @@
         current = {
           title: head[0] ? head[0].trim() : "",
           sub: head[1] ? head[1].trim() : "",
+          link: head[2] ? head[2].trim() : "",
           notes: [],
           rows: []
         };
@@ -140,6 +141,20 @@
 
   function isDate(v) {
     return /^[0-9]{1,4}[.\/年]/.test(v);
+  }
+
+  /* 外部サイトと PDF は別タブで開く。読んでいたページを閉じずに戻れるようにするため。
+     サイト内のページは、そのまま移動したほうが行き来しやすいので同じタブで開く */
+  function opensNewTab(href) {
+    return /^https?:\/\//i.test(href) || /\.pdf([?#]|$)/i.test(href);
+  }
+
+  function setLink(node, href) {
+    node.setAttribute("href", href);
+    if (opensNewTab(href)) {
+      node.target = "_blank";
+      node.rel = "noopener";
+    }
   }
 
   /* ---------- 日付の整形 ---------- */
@@ -1028,6 +1043,75 @@
   }
 
   /* =========================================================
+     駐車場のご案内
+     形式: 画像 | 場所 | 説明   … 地図の画像
+           項目 | 地図のURL     … Google マップを開くリンク
+           それ以外の行         … 1 行が 1 項目のご案内
+     ========================================================= */
+
+  function renderParking(target, blocks) {
+    var card = el("div", "parking");
+    var body = el("div", "parking__body");
+    var count = 0;
+
+    blocks.forEach(function (b) {
+      if (b.title) body.appendChild(el("h3", "parking__title", b.title));
+
+      var list = el("ul", "parking__list");
+
+      b.rows.forEach(function (f) {
+        if (f[0] === "画像") {
+          // 置き場所が空なら、まだ用意できていないものとして出さない
+          if (!f[1]) return;
+
+          var fig = el("figure", "parking__map");
+          var img = el("img", "parking__img");
+          img.setAttribute("src", f[1]);
+          img.setAttribute("alt", f[2] || "");
+          img.setAttribute("loading", "lazy");
+          fig.appendChild(img);
+          if (f[2]) fig.appendChild(el("figcaption", "parking__cap", f[2]));
+          card.appendChild(fig);
+          count++;
+          return;
+        }
+
+        var item = el("li", "parking__item");
+
+        // 地図の場所が書かれている行だけ、Google マップへのリンクにする
+        if (f[1]) {
+          var link = el("a", "parking__link", f[0] || "");
+          link.setAttribute("href", f[1]);
+          link.target = "_blank";
+          link.rel = "noopener";
+          link.appendChild(el("span", "parking__ext", "地図"));
+          item.appendChild(link);
+        } else {
+          item.textContent = f[0] || "";
+        }
+
+        list.appendChild(item);
+        count++;
+      });
+
+      if (list.childNodes.length) body.appendChild(list);
+
+      b.notes.forEach(function (n) {
+        body.appendChild(el("p", "parking__note", n));
+        count++;
+      });
+    });
+
+    if (!count) {
+      target.appendChild(el("p", "empty", "駐車場のご案内はまだ登録されていません。"));
+      return;
+    }
+
+    card.appendChild(body);
+    target.appendChild(card);
+  }
+
+  /* =========================================================
      お知らせ
      形式: # タイトル | ON     … 1 件のはじまり（OFF なら出さない）
            本文               … 1 行が 1 段落
@@ -1043,7 +1127,20 @@
       if (!b.rows.length && !b.notes.length) return;
 
       var item = el("article", "info");
-      if (b.title) item.appendChild(el("h2", "info__title", b.title));
+
+      if (b.title) {
+        var head = el("h2", "info__title");
+        // リンク先が書かれている件だけ、見出しの帯ごとリンクにする
+        if (b.link) {
+          var titleLink = el("a", "info__titlelink", b.title);
+          setLink(titleLink, b.link);
+          titleLink.appendChild(el("span", "info__arrow"));
+          head.appendChild(titleLink);
+        } else {
+          head.textContent = b.title;
+        }
+        item.appendChild(head);
+      }
 
       var body = el("div", "info__body");
 
@@ -1122,6 +1219,8 @@
   render("js-information", "data/information.txt", renderInformation);
 
   render("js-policy", "data/policy.txt", renderPolicy);
+
+  render("js-parking", "data/parking.txt", renderParking);
 
   render("js-club", "data/club.txt", renderClub);
 
