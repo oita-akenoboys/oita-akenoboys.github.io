@@ -117,11 +117,14 @@
     target.appendChild(box);
   }
 
+  // 描画の終わりを待てるように、読み込みの約束をためておく
+  var pending = [];
+
   function render(targetId, dataPath, renderer) {
     var target = document.getElementById(targetId);
     if (!target) return;
 
-    loadText(dataPath)
+    var job = loadText(dataPath)
       .then(function (text) {
         var blocks = parse(text);
         target.textContent = "";
@@ -135,6 +138,44 @@
             "）"
         );
       });
+
+    pending.push(job);
+  }
+
+  /* ---------- 見出しへのジャンプ（club.html#parking など） ----------
+     ページの中身は JavaScript が後から入れるので、ブラウザまかせだと
+     まだ空のうちに飛んでしまい、狙った見出しとは違う場所で止まります。
+     そこで、中身が入り終わったところで位置を合わせ直します。
+     ヘッダーの分の余白は CSS の scroll-padding-top が見てくれます。 */
+
+  var userScrolled = false;
+
+  ["wheel", "touchstart", "touchmove", "keydown", "mousedown"].forEach(function (name) {
+    window.addEventListener(name, function () {
+      userScrolled = true;
+    }, { passive: true, once: true });
+  });
+
+  function scrollToHash() {
+    if (userScrolled) return;              // 自分で動かした人を引き戻さない
+    var hash = window.location.hash;
+    if (!hash || hash.length < 2) return;
+
+    var target;
+    try {
+      target = document.querySelector(hash);
+    } catch (e) {
+      return;                              // #123 のように id にできない書き方
+    }
+    if (!target) return;
+
+    /* 位置の直しなので、なめらか送りはいったん切る。
+       behavior: "auto" は CSS の指定に従う意味で、切る指定にはならない */
+    var root = document.documentElement;
+    var keep = root.style.scrollBehavior;
+    root.style.scrollBehavior = "auto";
+    target.scrollIntoView();
+    root.style.scrollBehavior = keep;
   }
 
   /* ---------- URL の ?term=21 などを取り出す ---------- */
@@ -1156,6 +1197,15 @@
       var body = el("div", "info__body");
 
       b.rows.forEach(function (f) {
+        if (f[0] === "目印") {
+          /* information.html#parking のように、この件へ直接リンクするための目印。
+             アドレスに使うので、英数字（と - _）で書かれたものだけ受け付ける。
+             書き間違いのときは目印なしになるだけで、本文の表示は変わらない */
+          var mark = (f[1] || "").trim();
+          if (/^[A-Za-z0-9][A-Za-z0-9_-]*$/.test(mark)) item.id = mark;
+          return;
+        }
+
         if (f[0] === "画像") {
           // 置き場所が空なら、まだ用意できていないものとして出さない
           if (!f[1]) return;
@@ -1236,4 +1286,15 @@
   render("js-club", "data/club.txt", renderClub);
 
   render("js-join", "data/join.txt", renderJoin);
+
+  // 中身が入ったところで 1 回、ページの読み込みが終わったところでもう 1 回
+  Promise.all(pending).then(scrollToHash);
+  window.addEventListener("load", scrollToHash);
+
+  /* 写真は表示位置に近づいてから読み込まれるので、そのたびに上下の高さが変わる。
+     1 枚読み終わるごとに合わせ直す（load は親に伝わらないので捕まえる側で拾う）。
+     読む人が自分で動かしたあとは、上の userScrolled で止まる */
+  document.addEventListener("load", function (e) {
+    if (e.target && e.target.tagName === "IMG") scrollToHash();
+  }, true);
 })();

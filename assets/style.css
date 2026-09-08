@@ -44,6 +44,9 @@
 
 html {
   scroll-behavior: smooth;
+  /* club.html#parking のように見出しへ飛んだとき、
+     上に貼り付いているヘッダーの下に隠れないよう、その分だけ余白を取る */
+  scroll-padding-top: var(--header-h);
 }
 
 body {
