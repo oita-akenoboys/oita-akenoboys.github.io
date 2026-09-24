@@ -29,6 +29,48 @@
     });
   }
 
+  /* ---------- トップページ：ヒーロー画像のスライドショー ---------- */
+
+  var heroBanner = document.getElementById("js-hero-banner");
+
+  if (heroBanner) {
+    var reduceMotion = window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // 用意されていない画像（hero-banner-2.jpg など）は読み込みエラーになるので
+    // 実在する画像だけを切り替え対象にする
+    var heroSlidesReady = Array.prototype.slice.call(heroBanner.querySelectorAll("img"))
+      .filter(function (img) { return !img.dataset.heroMissing; });
+
+    heroBanner.querySelectorAll("img").forEach(function (img) {
+      if (img.complete && img.naturalWidth === 0) {
+        img.dataset.heroMissing = "true";
+      } else {
+        img.addEventListener("error", function () {
+          img.dataset.heroMissing = "true";
+          heroSlidesReady = heroSlidesReady.filter(function (i) { return i !== img; });
+        });
+      }
+    });
+
+    if (!reduceMotion) {
+      setTimeout(function () {
+        heroSlidesReady = heroSlidesReady.filter(function (img) { return !img.dataset.heroMissing; });
+
+        if (heroSlidesReady.length < 2) return;
+
+        var heroIndex = heroSlidesReady.indexOf(heroBanner.querySelector("img.is-active"));
+        if (heroIndex < 0) heroIndex = 0;
+
+        setInterval(function () {
+          heroSlidesReady[heroIndex].classList.remove("is-active");
+          heroIndex = (heroIndex + 1) % heroSlidesReady.length;
+          heroSlidesReady[heroIndex].classList.add("is-active");
+        }, 5000);
+      }, 300); // 画像の読み込みエラーが出そろうのを少し待つ
+    }
+  }
+
   /* ---------- テキストデータの読み込み ---------- */
 
   // 更新がすぐ反映されるようキャッシュを避ける

@@ -370,14 +370,17 @@ a {
 }
 
 .hero__banner {
+  position: relative;
   flex: 1 1 460px;
   min-width: 0;
+  aspect-ratio: 1717 / 916;
 }
 
 .hero__banner img {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   border-radius: var(--radius);
   box-shadow: var(--shadow-lg);
   /* 左端を透明に落として、隣接する見出し側の背景に溶け込ませる */
@@ -395,6 +398,19 @@ a {
     rgba(0, 0, 0, 0.65) 24%,
     #000 42%
   );
+}
+
+/* 複数枚を重ねて置き、数秒おきにフェードで切り替える（js-hero-banner） */
+.hero__banner img {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+.hero__banner img.is-active {
+  opacity: 1;
+  z-index: 1;
 }
 
 @media (max-width: 860px) {
@@ -416,6 +432,7 @@ a {
     flex: 1 1 auto;
     order: 2;
     width: auto;
+    aspect-ratio: 16 / 10;
     margin-inline: -20px;
   }
 
@@ -423,7 +440,6 @@ a {
      左端の余白だけを切り落とし、ロゴと選手の両方が入る位置で拡大する */
   .hero__banner img {
     width: 100%;
-    aspect-ratio: 16 / 10;
     object-fit: cover;
     object-position: 40% center;
     border-radius: 0;
