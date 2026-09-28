@@ -1203,6 +1203,15 @@ a {
   list-style: none;
 }
 
+/* 年間予定表は枚数が少ないので、1 枚だけのときに横いっぱいへ伸びないようにする。
+   画面が狭いときは月間スケジュールと同じく、横幅いっぱいのカードでよい */
+@media (min-width: 601px) {
+  .schedule--yearly {
+    grid-template-columns: repeat(auto-fill, minmax(210px, 260px));
+    justify-content: start;
+  }
+}
+
 .schedule__card {
   display: flex;
   align-items: center;

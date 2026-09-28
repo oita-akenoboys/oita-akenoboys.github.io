@@ -500,6 +500,60 @@
   }
 
   /* =========================================================
+     年間予定表（スケジュールページの中段）
+     形式: 見出し | PDFの場所
+           2026年度 | pdf/2026.pdf
+
+     月間スケジュールと同じカードですが、月が無いので
+     書かれた見出しをそのまま大きく出します。
+     ========================================================= */
+
+  function renderYearly(target, blocks) {
+    var rows = [];
+    blocks.forEach(function (b) {
+      rows = rows.concat(b.rows);
+    });
+
+    if (!rows.length) {
+      target.appendChild(el("p", "empty", "年間予定表はまだ登録されていません。"));
+      return;
+    }
+
+    var list = el("ul", "schedule schedule--yearly");
+    var count = 0;
+
+    rows.forEach(function (f) {
+      var label = f[0] || "";
+      var href = f[1] || "";
+      // PDF の場所が空の行は、まだ用意できていないものとして出さない
+      if (!href) return;
+
+      var link = el("a", "schedule__card");
+      link.href = href;
+      link.target = "_blank";
+      link.rel = "noopener";
+
+      link.appendChild(el("span", "schedule__icon", "PDF"));
+
+      var box = el("span");
+      box.appendChild(el("span", "schedule__month", label));
+      link.appendChild(box);
+
+      var item = el("li");
+      item.appendChild(link);
+      list.appendChild(item);
+      count++;
+    });
+
+    if (!count) {
+      target.appendChild(el("p", "empty", "年間予定表はまだ登録されていません。"));
+      return;
+    }
+
+    target.appendChild(list);
+  }
+
+  /* =========================================================
      期の一覧（選手紹介・卒団生）
 
      一覧ファイル（players.txt / graduates.txt）には
@@ -1310,6 +1364,8 @@
   render("js-schedule", "data/schedule.txt", function (t, b) {
     renderSchedule(t, b);
   });
+
+  render("js-yearly", "data/yearly.txt", renderYearly);
 
   render("js-players", "data/players.txt", renderTerms);
 
