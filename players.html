@@ -3,15 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 読み込みを許す先をここで制限しています。
+     外部のサービスを足すときは、その行き先をここにも書き足してください。
+     （書き足さないと、そのサービスは動きません）-->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'none'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.googletagmanager.com https://*.google-analytics.com; font-src 'self'; connect-src 'self' https://*.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-src https://calendar.google.com; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <!-- Google tag (gtag.js) -->
+<script src="assets/ga.js"></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ECQSMP1XQQ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-ECQSMP1XQQ');
-</script>
 <title>選手紹介 | 大分明野ボーイズ</title>
 <meta name="description" content="大分明野ボーイズの選手紹介。期ごとの在籍選手を、氏名・出身中学・出身チームとあわせて掲載しています。">
 <link rel="canonical" href="https://oita-akenoboys.github.io/players.html">
