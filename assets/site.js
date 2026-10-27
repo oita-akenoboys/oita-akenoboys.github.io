@@ -1048,19 +1048,35 @@
 
     rows.forEach(function (f) {
       var value = f[1] || "";
-      var href = contactHref(value);
       var row = el("div", "contact__row");
 
       row.appendChild(el("dt", "contact__label", f[0] || ""));
 
       var dd = el("dd", "contact__value");
-      if (href) {
-        var link = el("a", "contact__link", value);
-        link.setAttribute("href", href);
-        dd.appendChild(link);
+
+      /* 「ラベル | 画像 | 置き場所」の行は画像で出す。
+         電話番号は自動の収集ロボットに拾われやすいので、
+         文字ではなく画像にして載せている。
+         番号そのものを alt に書くと画像にした意味がなくなるため、
+         読み上げ用の説明だけを添える */
+      if (value === "画像") {
+        if (!f[2]) return;
+        var img = el("img", "contact__img");
+        img.setAttribute("src", f[2]);
+        img.setAttribute("alt", f[3] || "電話番号（画像）");
+        img.setAttribute("loading", "lazy");
+        dd.appendChild(img);
       } else {
-        dd.textContent = value;
+        var href = contactHref(value);
+        if (href) {
+          var link = el("a", "contact__link", value);
+          link.setAttribute("href", href);
+          dd.appendChild(link);
+        } else {
+          dd.textContent = value;
+        }
       }
+
       row.appendChild(dd);
 
       list.appendChild(row);

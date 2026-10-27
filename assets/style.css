@@ -846,6 +846,13 @@ a {
   color: var(--gray-800);
 }
 
+/* 画像で載せた電話番号。周りの文字と同じ大きさに揃える */
+.contact__img {
+  display: block;
+  width: auto;
+  height: 27px;
+}
+
 .contact__link {
   color: var(--blue);
   text-decoration: none;
