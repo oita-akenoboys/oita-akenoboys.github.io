@@ -11,6 +11,11 @@ Allow: /
 Disallow: /data/README.txt
 Disallow: /info/README.txt
 
+# 選手・卒団生の名簿です。
+# 氏名や出身小学校が検索結果に出ないよう、クローラには読ませません。
+# （サイトを見に来た人には今までどおり表示されます）
+Disallow: /data/terms/
+
 # data/ の他の txt はページの中身そのものです。
 # ここを Disallow にすると検索エンジンがページの内容を読めなくなります。
 
